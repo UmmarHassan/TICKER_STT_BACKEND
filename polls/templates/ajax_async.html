@@ -1,0 +1,22 @@
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js'></script>
+<script type="text/javascript">
+  var getting=setInterval(sendingData,3000)
+  function sendingData(){
+
+
+      $.ajax({
+        url:"{% url 'my_view' %}",
+        method:'POST',
+        datatype:'json',
+        headers:{'X-CSRF-Token':'{{csrf_token}}'},
+        data:{
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          'my_view_data':JSON.stringify([1,2,3,4])
+
+        },
+        success:function(data){
+          console.log('I am successfull')
+        }
+       })
+  }
+</script>

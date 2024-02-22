@@ -1,0 +1,703 @@
+
+</head>
+
+
+
+<!-- ************ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticker Extraction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<link rel="stylesheet"
+		href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+
+  
+	<style>
+		.input-icons i {
+			position: absolute;
+      margin-top: 1%;
+		}
+		
+		.input-icons {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+		
+		.icon {
+			padding: 10px;
+			color: black;
+			min-width: 50px;
+			text-align: center;
+		}
+		
+		.input-field {
+			width: 100%;
+			padding: 10px;
+			text-align: center;
+		}
+		
+		h2 {
+			color: black;
+		}
+	</style>
+<script>
+  // Get the date input element
+  const dateInput = document.getElementById("myDateInput");
+
+  // Set the placeholder text
+
+
+  // Remove the placeholder text when a date is selected
+  dateInput.addEventListener("change", function () {
+    this.removeAttribute("placeholder");
+  });
+</script>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <!-- Brand/logo aligned to the left -->
+
+           <a class="navbar-brand" href="#">
+        <img src="/static/94225.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+       Ticker
+      </a>
+  
+      <!-- Ticker and Logout dropdown aligned to the right -->
+      <div class="ml-auto">
+        <ul class="navbar-nav">
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">
+              <marquee behavior="scroll" direction="left" scrollamount="3">Brand Ticker</marquee>
+            </a>
+          </li> -->
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle  " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Logout
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    
+  <!-- <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+       Ticker
+      </a>
+    </div>
+    
+  </nav>
+  <div class="dropdown ml-auto mr-auto">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dropdown
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <button class="dropdown-item" type="button">Action</button>
+      <button class="dropdown-item" type="button">Another action</button>
+      <button class="dropdown-item" type="button">Something else here</button>
+    </div>
+  </div> -->
+
+
+<div class="container-fluid mt-5" style="display: flex;justify-content: flex-start;width: 50% ">
+  
+<div class="row">
+<div class=" col-sm-12 col-md-6 col-lg-6 col-xl-6" >
+     <div class="input-icons ">
+                  <i class="fa fa-search icon " style="margin-bottom: ">
+                </i>
+                  <input form="myForm" name="wordsearched"  style="border-radius: 10px;border: 1px solid black;" class="input-field"
+                    type="text"
+                    placeholder="Search">
+                </div>  
+</div>
+<div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+  <select id="myDropdown" style="border-radius: 10px;width: 100%;border: 1px solid black;" class='form-select p-2'>
+                  <option selected value="option0">Choose Channel</option>
+                  <option value="option1">Geo</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+
+                </select>
+  </div>
+
+  <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+       <div class='form-check form-switch'>
+                  <input  style="border-radius: 10px;border: 1px solid black;" class='form-check-input ' type='checkbox' id='toggleSwitch' />
+                  <label class='form-check-label' for='toggleSwitch'>RealTime</label>
+                </div>
+  </div>
+</div>
+  </div>
+
+
+          
+          <form method="POST" action="{% url 'index' %}"  id="myForm" >
+            {% csrf_token %}
+            <div class="container-fluid" style="display: flex;justify-content: center;">
+          <div class="row "  >
+            <div class=" col-sm-12 col-md-2 col-lg-2 col-xl-2" style="display: none">
+                            <input   name="channel_name" style="border-radius: 10px;border: 1px solid black;" id="namechannel" type='text' class='form-control' />
+
+            </div>
+           
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
+              
+              <input  name="gettingdate" style="border-radius: 10px;border: 1px solid black;"  type='date' class='form-control' />
+
+            </div>
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
+              <input name="gettingdateend" style="border-radius: 10px;border: 1px solid black;" type='date' class='form-control' />
+
+            </div>
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
+              <input name="gettingtime" style="border-radius: 10px;border: 1px solid black;" type='time' class='form-control' />
+
+            </div>
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
+              <input name="gettingtimeend" style="border-radius: 10px;border: 1px solid black;" type='time' class='form-control' />
+ 
+            </div>
+
+            <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+              <button class='btn btn-primary' style="border-radius: 10px;" id="applyButton" >Apply</button>
+ 
+            </div>
+          </div>
+          </div>
+        </form>
+          
+   
+
+
+          <div class='table-responsive' style="width: 100%;">
+            <table class='table table-sm table-striped'  id="fulltable"  style="display: none;width: 60%;margin-right: auto;margin-left: auto;">
+              <thead class='table-light'  id="iwilldisplay">
+                <tr >
+                  <th scope='col' style="text-align: center;">Channel</th>
+                  <th scope='col' style="text-align: center;">News</th>
+                  <th scope='col' style="text-align: center;">Date</th>
+                  <th scope='col' style="text-align: center;">Time</th>
+                                    <th scope='col' style="text-align: center;">Text</th>
+
+             
+
+                <tr >
+                  <td style="width: 10%;"><img id='onelogo' width="90%"></td>
+                  <td ><img id="one" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px" ></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrone"></h3></td>
+
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img id='twologo' width="90%"></td>
+
+                  <td ><img id="two" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrtwo"></h3></td>
+
+                  </tr>
+                  <tr>
+                  <td style="width: 10%;"><img id='threelogo' width="90%"></td>
+
+                  <td ><img id="three" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrthree"></h3></td>
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img id='fourlogo' width="90%"></td>
+
+                  <td ><img id="four" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrfour"></h3></td>
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img id='fivelogo' width="90%"></td>
+
+                  <td ><img id="five" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrfive"></h3></td>
+
+                </tr>
+                <tr id="displaysix">
+                  <td style="width: 10%;"><img id='sixlogo' width="90%"></td>
+
+                  <td ><img id="six" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrsix"></h3></td>
+
+                </tr>
+                <tr id="displayseven">
+                  <td style="width: 10%;"><img id='sevenlogo' width="90%"></td>
+
+                  <td ><img id="seven" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                  <td> <h3 id="ocrseven"></h3></td>
+                </tr>
+                <tr id="displayeight">
+                  <td style="width: 10%;"><img id='eightlogo' width="90%"></td>
+
+                  <td ><img id="eight" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocreight"></h3></td>
+
+                </tr>
+                <tr id="displaynine">
+                  <td style="width: 10%;"><img id='ninelogo' width="90%"></td>
+
+                  <td ><img id="nine" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrnine"></h3></td>
+
+                </tr>
+                <tr id="displayten">
+                  <td style="width: 10%;"><img id='tenlogo' width="90%"></td>
+
+                  <td ><img id="ten" src="" width="100%" height="90vh" style="padding:2px 0px 18px 0px"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+                  <td> <h3 id="ocrten"></h3></td>
+
+                </tr>
+               
+                
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div> 
+          
+           <table class='table table-sm table-striped' id="resultdisplay" style="display: none;width: 60%;margin-right: auto;margin-left: auto;" >
+            <thead class='table-light'>
+              <tr >
+                <th scope='col' style="text-align: center;">Channel</th>
+                <th scope='col' style="text-align: center;">News</th>
+                <th scope='col' style="text-align: center;">Date</th>
+                <th scope='col' style="text-align: center;">Time</th>
+                <!-- <th scope='col'></th> -->
+              </tr>
+              </thead>
+              <tbody id="table-body">
+            {% for i in result %}
+              <tr >
+                <td style="width: 10%;"><img width="90%"  src="/static/{{i.channel_image}} "></td>
+                <td ><img  src="/static/{{i.ticker_image}}" width="100%" height="90vh" style="padding:2px 0px 18px 0px" ></td>
+                <td> <h3 >{{i.date}}</h3></td>
+                <td> <h3 >{{i.time}}</h3></td>
+
+              </tr>
+            {% endfor %}
+              </tbody>
+              </table>
+              <div id="load-more-container"  >
+                <button style="display: none;" id="load-more-btn" class="btn btn-primary">Load More</button>
+            </div>
+    
+       
+       
+        </div>
+   
+<!-- each time template renders through return render it will be executed by when toggle button is clicked stat of elements will be change although if result is true as ajax dont look at whole template only the specified elements -->
+{% if result %}
+<script>
+    document.getElementById('fulltable').style.display='none'
+  document.getElementById('resultdisplay').style.display='block'
+  document.getElementById('load-more-btn').style.display='block'
+
+</script>
+{% endif %}
+
+
+
+
+
+<script>
+
+var dunya=false
+var programRunning = false;
+var intervalSetDunya
+$(document).ready(function() {
+
+
+
+  $("#myForm").submit(function(event) {
+    event.preventDefault();
+
+    var selectedOption = $("#myDropdown").val();
+    $("#namechannel").val(`${selectedOption}`);
+    $(this).unbind("submit").submit();
+
+
+  })
+  // Ajax call always look at elements inside it not whole template once the if result condition in set to true during template rendering it will remain true ajax rendering will not effect it unless changed by return render {'result':False} type expression
+  // here although above i have defined if result but during toggleSwitch although if result will remain true but ajax will look at those element and change their state but if had defined if not result as the result will be remaining True so table was not rendering
+// so you can override if condition element throught ajax but only in case they exists in previous one you have defind table under if not result which will always be False so you get error
+  // Add a click event listener to the "Apply" button
+  $("#toggleSwitch").click(function() {
+    document.getElementById('resultdisplay').style.display='none'
+    document.getElementById('load-more-btn').style.display='none'
+
+    programRunning = !programRunning;
+    /* toggleButton.classList.toggle('on');*/
+    if (programRunning) {
+       dunya=true
+      var selectedOption = $("#myDropdown").val();
+      console.log(selectedOption)
+
+
+      applyOption(selectedOption);
+
+  } else {
+    dunya=false
+    var selectedOption = $("#myDropdown").val('option0');
+clearInterval(intervalSetDunya)
+
+    
+   
+  }
+
+  
+      
+
+    console.log('clicked')
+    // Get the selected option value
+    
+    // Apply the selected option
+  });
+});
+
+
+// Function to apply the selected option
+function applyOption(option) {
+  clearInterval(intervalSetDunya);
+
+  // Perform the desired action based on the selected option
+  switch (option) {
+  
+    case "option1":
+      // dunya=true
+
+      console.log('option1')
+      console.log('dunya',dunya)
+      // Action for Option 1
+      if (dunya===true){
+      intervalSetDunya=setInterval(forOption1,7000)
+
+      /*document.getElementById('iwilldisplay').style.display='block'*/
+    }
+     if (dunya===false){
+      clearInterval(intervalSetDunya)
+    }
+      function forOption1(){
+      $.ajax({
+      url: "{% url 'dunya_ticker' %}",
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+            document.getElementById('fulltable').style.display='block'
+
+      var images=data.all_tickers
+      var ocr_result=data.text_ocr
+      for (let index = 0; index < images.length; index++) {
+        console.log('index',index)
+        console.log('data.date',data.date)
+        console.log('data.ticker',data.all_tickers)
+         console.log('data.text_ocr',data.text_ocr)
+        var Datetable = document.getElementsByClassName("date");
+        for (var i = 0; i < Datetable.length; i++) {
+  Datetable[i].innerHTML = data.date;
+}
+var timeTabel=document.getElementsByClassName('time')
+for (let index = 0; index < timeTabel.length; index++) {
+timeTabel[index].innerHTML = data.time
+  
+}
+
+var all_tabel_elements=document.querySelectorAll('td')
+for (let index = 0; index < all_tabel_elements.length; index++) {
+all_tabel_elements[index].style.border = '2px solid black'
+all_tabel_elements[index].style.borderRadius = '25px'
+
+  
+}
+
+getting_tr_th=document.querySelectorAll('tr th')
+for (let index = 0; index < getting_tr_th.length; index++) {
+getting_tr_th[index].style.border = '2px solid black'
+all_tabel_elements[index].style.borderRadius = '25px'
+ 
+}
+
+        
+    
+        if (index===0) {
+          one=document.getElementById('one')
+
+          one.src='/static/'+String(images[index][0])
+          oneLogo=document.getElementById('onelogo')
+
+          oneLogo.src='/static/geo.png'
+                    document.getElementById('ocrone').innerHTML=String(images[index][1])
+
+        }
+        if (index===1) {
+          two=document.getElementById('two')
+
+          two.src='/static/'+String(images[index][0])
+          
+             twoLogo=document.getElementById('twologo')
+
+          twoLogo.src='/static/geo.png'
+          document.getElementById('ocrtwo').style.whiteSpace = 'pre-wrap'
+
+                    document.getElementById('ocrtwo').innerHTML=String(images[index][1])
+
+        }
+
+        if (index===2) {
+
+          three=document.getElementById('three')
+
+          
+
+          three.src='/static/'+String(images[index][0])
+             threeLogo=document.getElementById('threelogo')
+
+          threeLogo.src='/static/geo.png'
+                   document.getElementById('ocrthree').innerHTML=String(images[index][1])
+ 
+          
+        }
+
+        
+        if (index===3) {
+
+four=document.getElementById('four')
+
+
+four.src='/static/'+String(images[index][0])
+   fourLogo=document.getElementById('fourlogo')
+
+          fourLogo.src='/static/geo.png'
+          document.getElementById('ocrfour').innerHTML=String(images[index][1])
+
+
+}
+
+        
+if (index===4) {
+
+five=document.getElementById('five')
+
+
+five.src='/static/'+String(images[index][0])
+   fiveLogo=document.getElementById('fivelogo')
+
+          fiveLogo.src='/static/geo.png'
+          document.getElementById('ocrfive').innerHTML=String(images[index][1])
+
+
+}
+
+  console.log('length',data.all_tickers.length)
+
+
+
+if (index===5) {
+
+six=document.getElementById('six')
+
+
+six.src='/static/'+String(images[index][0])
+
+   sixLogo=document.getElementById('sixlogo')
+
+          sixLogo.src='/static/geo.png'
+                    document.getElementById('ocrsix').innerHTML=String(images[index][1])
+
+}
+
+
+if (index===6) {
+
+seven=document.getElementById('seven')
+
+
+seven.src='/static/'+String(images[index][0])
+   sevenLogo=document.getElementById('sevenlogo')
+
+          sevenLogo.src='/static/geo.png'
+              document.getElementById('ocrseven').innerHTML=String(images[index][1])
+      
+}
+
+
+if (index===7) {
+
+eight=document.getElementById('eight')
+
+
+eight.src='/static/'+String(images[index][0])
+   eightLogo=document.getElementById('eightlogo')
+
+          eightLogo.src='/static/geo.png'
+              document.getElementById('ocreight').innerHTML=String(images[index][1])
+
+
+}
+
+
+if (index===8) {
+
+nine=document.getElementById('nine')
+
+
+nine.src='/static/'+String(images[index][0])
+   nineLogo=document.getElementById('ninelogo')
+
+          nineLogo.src='/static/geo.png'
+
+              document.getElementById('ocrnine').innerHTML=String(images[index][1])
+
+}
+
+if (index===9) {
+
+ten=document.getElementById('ten')
+
+
+ten.src='/static/'+String(images[index][0])
+   tenLogo=document.getElementById('tenlogo')
+
+          tenLogo.src='/static/geo.png'
+
+              document.getElementById('ocrten').innerHTML=String(images[index][1])
+
+}
+
+      }
+
+      console.log('images',images)
+        // Process the response data
+        console.log(data);
+      },
+      error: function(error) {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      }
+    });
+  }
+      // console.log("Option 1 selected");
+      break;
+    case "option2":
+      dunya=false
+      // Action for Option 2
+      console.log("Option 2 selected");
+      break;
+    case "option3":
+      dunya=false
+      // Action for Option 3
+      console.log("Option 3 selected");
+      break;
+    default:
+    
+      // Default action if no option is selected
+      
+      console.log("No option selected");
+  }
+}
+
+
+
+
+/* Paginator function*/
+$(document).ready(function() {
+    var page = 2;  // Starting from the second page
+    var loadMoreBtn = $("#load-more-btn");
+    var tableBody = $("#table-body");
+    var loader = $("#loader");
+    var loadMoreContainer = $("#load-more-container");
+
+    loadMoreBtn.click(function() {
+     
+        loadMoreBtn.prop('disabled', true); // Disable the button to prevent multiple clicks
+        loader.show(); // Show the loader
+
+        $.ajax({
+            url: "{% url 'table_view' %}",
+            data: { page: page },
+            dataType: 'html',
+            success: function(data) {
+  
+              console.log('data',data)
+              
+                var newRows = $(data).find("#resultdisplay tr:not(:first)"); // Extract the new rows from the response, excluding the header row
+                tableBody.append(newRows); // Append the new rows to the table body
+                
+
+                page++;
+                loadMoreBtn.prop('disabled', false); // Enable the button after new data is loaded
+                loader.hide(); // Hide the loader
+                if (newRows.length === 0) {
+                    loadMoreContainer.remove(); // Remove the load more button container
+                }
+            },
+            error: function(error) {
+                console.error(error);
+                loadMoreBtn.prop('disabled', false); // Enable the button in case of error
+                loader.hide(); // Hide the loader
+            },
+            complete: function() {
+                // loadMoreContainer.remove(); // Remove the load more button container after the first click
+            }
+        });
+    });
+});
+
+
+</script>
+
+  
+
+</body>
+
+
+
+
+</html>
+
+
+ 

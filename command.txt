@@ -1,0 +1,6 @@
+waitress-serve --listen=*:8000 --thread=48 ticker_new.wsgi:application
+<<<<<<< HEAD
+uvicorn ticker_new.asgi:application --host 0.0.0.0 --port 8000 --ssl-keyfile "C:/Users/Administrator/private.key" --ssl-certfile "C:/Users/Administrator/certificate.crt" --reload
+=======
+uvicorn ticker_new.asgi:application --host 0.0.0.0 --port 8000 --ssl-keyfile "localhost.key" --ssl-certfile "localhost.crt" 
+>>>>>>> master

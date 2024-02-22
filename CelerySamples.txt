@@ -1,0 +1,51 @@
+#tasks.py
+from celery import shared_task
+import time
+
+@shared_task
+def print_message():
+    print("Scheduled task: Hello, this is a periodic message!")
+
+#views.py
+from django.shortcuts import render
+from .tasks import print_message
+
+def schedule_task_view(request):
+    print_message.delay()  # Schedule the task to run asynchronously
+    return render(request, 'template_name.html')
+
+<<<<<<< HEAD
+
+celery -A your_project_name worker --loglevel=info
+celery -A your_project_name beat --scheduler django_celery_beat.schedulers:DatabaseScheduler --loglevel=info
+#Start above both scripts at same time
+celery -A your_project_name multi start worker beat --loglevel=info
+=======
+run above task and view or
+# tasks.py
+
+from celery import shared_task
+
+@shared_task
+def print_message(message):  # Accept the message as an argument
+    print(f"Scheduled task: {message}")
+
+def schedule_task_view(request):
+    message = "Hello, this is a periodic message!"
+    print_message.delay(message)  # Pass the message as an argument to the task
+    return render(request, 'index.html')
+
+
+
+#This is for testing was it cant run celery tasks in parallel it can only run them one after another --pool solo
+celery -A your_app_name worker --pool=solo -l info
+or
+pip install eventlet
+#use --pool eventlet if you want to run celery tasks concurrently at parallel and faster speed
+celery -A ticker_new worker --pool=eventlet
+
+
+
+#celery beat
+celery -A ticker_new beat
+>>>>>>> master

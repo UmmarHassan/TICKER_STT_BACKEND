@@ -1,0 +1,706 @@
+
+</head>
+
+
+
+<!-- ************ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticker Extraction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<link rel="stylesheet"
+		href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+
+  
+	<style>
+		.input-icons i {
+			position: absolute;
+      margin-top: 1%;
+		}
+		
+		.input-icons {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+		
+		.icon {
+			padding: 10px;
+			color: black;
+			min-width: 50px;
+			text-align: center;
+		}
+		
+		.input-field {
+			width: 100%;
+			padding: 10px;
+			text-align: center;
+		}
+		
+		h2 {
+			color: black;
+		}
+	</style>
+<script>
+  // Get the date input element
+  const dateInput = document.getElementById("myDateInput");
+
+  // Set the placeholder text
+  dateInput.addEventListener("focus", function () {
+    this.setAttribute("placeholder", "Select Date");
+  });
+
+  // Remove the placeholder text when a date is selected
+  dateInput.addEventListener("change", function () {
+    this.removeAttribute("placeholder");
+  });
+</script>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <!-- Brand/logo aligned to the left -->
+
+           <a class="navbar-brand" href="#">
+        <img src="/static/94225.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+       Ticker
+      </a>
+  
+      <!-- Ticker and Logout dropdown aligned to the right -->
+      <div class="ml-auto">
+        <ul class="navbar-nav">
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">
+              <marquee behavior="scroll" direction="left" scrollamount="3">Brand Ticker</marquee>
+            </a>
+          </li> -->
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle  " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Logout
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    
+  <!-- <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+       Ticker
+      </a>
+    </div>
+    
+  </nav>
+  <div class="dropdown ml-auto mr-auto">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dropdown
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <button class="dropdown-item" type="button">Action</button>
+      <button class="dropdown-item" type="button">Another action</button>
+      <button class="dropdown-item" type="button">Something else here</button>
+    </div>
+  </div> -->
+
+
+<div class='container-fluid' style="width: 1500px;display: block;">
+  <div class='row justify-content-center mt-5 ml-5'>
+    <div class='col-12 col-md-8' >
+      <!-- <div class='card' style="width: 1200px;"> -->
+        <div class='card-body'  style="width: 1200px;">
+          <div class='row mb-3'>
+            <div class='col-md-4'>
+              <div class='input-group'>
+                <div class="input-icons">
+                  <i class="fa fa-search icon">
+                </i>
+                  <input  style="border-radius: 10px;border: 1px solid black;" class="input-field"
+                    type="text"
+                    placeholder="Search">
+                </div>              
+                <!-- <input   style="border-radius: 10px;border: 1px solid black;" type='text' class='form-control' placeholder='Search' /> -->
+                <!-- <button class='btn btn-primary' type='button'>Search</button> -->
+              </div>
+            </div>
+            <div class='col-md-5 '>
+              <div class='d-flex justify-content-between'>
+                <select id="myDropdown" style="border-radius: 10px;width: 50%;border: 1px solid black;" class='form-select p-2'>
+                  <option selected value="option0">Choose Channel</option>
+                  <option value="option1">Dunya</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+
+                </select>
+                <div class='form-check form-switch'>
+                  <input  style="border-radius: 10px;border: 1px solid black;" class='form-check-input ' type='checkbox' id='toggleSwitch' />
+                  <label class='form-check-label' for='toggleSwitch'>Real Time</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <form method="POST" action="{% url 'search' %}"  id="myForm">
+            {% csrf_token %}
+          <div class="row gx-5"  >
+            <div class="col-sm-6 col-md-2" style="display: none;">
+              
+              <input   name="channel_name" style="width: 100%;border-radius: 10px;border: 1px solid black;" id="namechannel" type='text' class='form-control' />
+
+            </div>
+            <div class="col-sm-6 col-md-2">
+              
+              <input  name="gettingdate" style="width: 100%;border-radius: 10px;border: 1px solid black;"  type='date' class='form-control' />
+
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <input name="gettingdateend" style="width: 100%;border-radius: 10px;border: 1px solid black;" type='date' class='form-control' />
+
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <input name="gettingtime" style="width: 100%;border-radius: 10px;border: 1px solid black;" type='time' class='form-control' />
+
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <input name="gettingtimeend" style="width: 100%;border-radius: 10px;border: 1px solid black;" type='time' class='form-control' />
+ 
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <button class='btn btn-primary' style="border-radius: 10px;" id="applyButton" >Apply</button>
+ 
+            </div>
+          </div>
+        </form>
+          <!-- <div class='row mb-4'>
+            <div class='col-md-6' >
+              <span style="display: inline-flex;"> -->
+              <!-- <label class='form-label'>Start Date</label> -->
+              <!-- <input style="width: 50%;"  type='date' class='form-control' />
+            </span>
+            </div>
+            <div class='col-md-6'>
+              <label class='form-label'>End Date</label>
+              <input type='date' class='form-control' />
+            </div>
+          </div>
+          <div class='row mb-4'>
+            <div class='col-md-6'>
+              <label class='form-label'>Start Time</label>
+              <input type='time' class='form-control' />
+            </div>
+            <div class='col-md-6'>
+              <label class='form-label'>End Time</label>
+              <input type='time' class='form-control' />
+            </div>
+          </div> -->
+          <div class='row mb-4'>
+            <div class='col-md-12'>
+              <!-- <button class='btn btn-primary' onclick="console.log('clicking apply')">Apply</button> -->
+            </div>
+          </div>
+
+          <!-- <div class='table-responsive' style="width: 80%;"> -->
+            <!-- <table class='table table-sm table-striped' id="fulltable"> -->
+              <!-- <thead class='table-light' style="display: none;" id="iwilldisplay"> -->
+                <!-- <tr > -->
+                  <!-- <th scope='col' style="text-align: center;">Channel</th> -->
+                  <!-- <th scope='col' style="text-align: center;">News</th> -->
+                  <!-- <th scope='col' style="text-align: center;">Date</th> -->
+                  <!-- <th scope='col' style="text-align: center;">Time</th> -->
+                  <!-- <th scope='col'></th> -->
+                <!-- </tr>
+
+                <tr >
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+                  <td ><img id="one" src="" width="100%" ></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="two" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                  </tr>
+                  <tr>
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="three" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="four" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr>
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="five" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr id="displaysix">
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="six" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr id="displayseven">
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="seven" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr id="displayeight">
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="eight" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr id="displaynine">
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="nine" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+                <tr id="displayten">
+                  <td style="width: 10%;"><img width="90%" src="/static/mzl-ftpchoha.png"></td>
+
+                  <td ><img id="ten" src="" width="100%"></td>
+                  <td> <h3 class="date"></h3></td>
+                  <td> <h3 class="time"></h3></td>
+
+                </tr>
+               
+                
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div> -->
+
+          {% if result %}
+          <script>          document,getElementById('fulltable').style.display='none';
+          clearInterval(intervalSetDunya)
+          
+          
+        </script>
+           <table class='table table-sm table-striped' id="resultdisplay">
+            <thead class='table-light'>
+              <tr >
+                <th scope='col' style="text-align: center;">Channel</th>
+                <th scope='col' style="text-align: center;">News</th>
+                <th scope='col' style="text-align: center;">Date</th>
+                <th scope='col' style="text-align: center;">Time</th>
+                <!-- <th scope='col'></th> -->
+              </tr>
+              </thead>
+              <tbody id="table-body">
+            {% for i in result %}
+              <tr >
+                <td style="width: 10%;"><img width="90%" src="/static/{{i.channel_image}} "></td>
+                <td ><img  src="/static/{{i.ticker_image}}" width="100%" ></td>
+                <td> <h3 >{{i.date}}</h3></td>
+                <td> <h3 >{{i.time}}</h3></td>
+
+              </tr>
+            {% endfor %}
+              </tbody>
+              </table>
+             {% if clear == 'False' %} 
+            <button class="btn btn-primary" id="load-more-btn">Load More</button>
+{% else %}
+<h2>No more data to load</h2>
+            {% endif %}
+            {% elif not result %}
+            <script>
+                        document.getElementById('resultdisplay').style.display='none'
+
+            </script>
+          {% endif %}
+          <!-- <nav aria-label='Table navigation'>
+            <span class='text-muted'>
+              Showing <span class='fw-bold'>1-10</span> of <span class='fw-bold'>1000</span>
+            </span>
+            <ul class='pagination'  style="display: flex;justify-content: flex-end;">
+              <li class='page-item disabled'>
+                <a class='page-link' href='#' tabindex='-1' aria-disabled='true'>
+                  Previous
+                </a>
+              </li>
+              <li class='page-item active' aria-current='page'>
+                <a class='page-link' href='#'>1</a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#'>2</a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#'>3</a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#'>...</a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#'>100</a>
+              </li>
+              <li class='page-item'>
+                <a class='page-link' href='#'>Next</a>
+              </li>
+            </ul>
+          </nav> -->
+        </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+var dunya=false
+var programRunning = false;
+var intervalSetDunya
+$(document).ready(function() {
+  $("#myForm").submit(function(event) {
+    event.preventDefault();
+
+    var selectedOption = $("#myDropdown").val();
+    $("#namechannel").val(`${selectedOption}`);
+    $(this).unbind("submit").submit();
+
+
+  })
+  // Add a click event listener to the "Apply" button
+  $("#toggleSwitch").click(function() {
+    programRunning = !programRunning;
+    /* toggleButton.classList.toggle('on');*/
+    if (programRunning) {
+       dunya=true
+      var selectedOption = $("#myDropdown").val();
+      console.log(selectedOption)
+
+
+      applyOption(selectedOption);
+
+  } else {
+    dunya=false
+    var selectedOption = $("#myDropdown").val('option0');
+clearInterval(intervalSetDunya)
+
+    
+   
+  }
+
+  
+      
+          document.getElementById('iwilldisplay').style.display='block'
+
+    console.log('clicked')
+    // Get the selected option value
+    
+    // Apply the selected option
+  });
+});
+
+
+// Function to apply the selected option
+function applyOption(option) {
+  clearInterval(intervalSetDunya);
+
+  // Perform the desired action based on the selected option
+  switch (option) {
+  
+    case "option1":
+      // dunya=true
+
+      console.log('option1')
+      console.log('dunya',dunya)
+      // Action for Option 1
+      if (dunya===true){
+      intervalSetDunya=setInterval(forOption1,4000)
+
+      /*document.getElementById('iwilldisplay').style.display='block'*/
+    }
+     if (dunya===false){
+      clearInterval(intervalSetDunya)
+    }
+      function forOption1(){
+      $.ajax({
+      url: "{% url 'dunya_ticker' %}",
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+      var images=data.all_tickers
+      for (let index = 0; index < images.length; index++) {
+        console.log('index',index)
+        console.log('data.date',data.date)
+        var Datetable = document.getElementsByClassName("date");
+        for (var i = 0; i < Datetable.length; i++) {
+  Datetable[i].innerHTML = data.date;
+}
+var timeTabel=document.getElementsByClassName('time')
+for (let index = 0; index < timeTabel.length; index++) {
+timeTabel[index].innerHTML = data.time
+  
+}
+
+var all_tabel_elements=document.querySelectorAll('td')
+for (let index = 0; index < all_tabel_elements.length; index++) {
+all_tabel_elements[index].style.border = '2px solid black'
+all_tabel_elements[index].style.borderRadius = '25px'
+
+  
+}
+
+getting_tr_th=document.querySelectorAll('tr th')
+for (let index = 0; index < getting_tr_th.length; index++) {
+getting_tr_th[index].style.border = '2px solid black'
+all_tabel_elements[index].style.borderRadius = '25px'
+ 
+}
+
+        
+    
+        if (index===0) {
+          one=document.getElementById('one')
+
+          one.src='/static/'+String(images[index])
+          
+        }
+        if (index===1) {
+          two=document.getElementById('two')
+
+          two.src='/static/'+String(images[index])
+          
+        }
+
+        if (index===2) {
+
+          three=document.getElementById('three')
+
+          
+
+          three.src='/static/'+String(images[index])
+          
+        }
+
+        
+        if (index===3) {
+
+four=document.getElementById('four')
+
+
+four.src='/static/'+String(images[index])
+
+}
+
+        
+if (index===4) {
+
+five=document.getElementById('five')
+
+
+five.src='/static/'+String(images[index])
+
+}
+  sixdisplay=document.getElementById('displaysix')
+  sevendisplay=document.getElementById('displayseven')
+  eightdisplay=document.getElementById('displayeight')
+  ninedisplay=document.getElementById('displaynine')
+  tendisplay=document.getElementById('displayten')
+  console.log('length',data.all_tickers.length)
+{/*if (data.all_tickers.length <= 5){
+  sixdisplay.style.display='none'
+  sevendisplay.style.display='none'
+  eightdisplay.style.display='none'
+  ninedisplay.style.display='none'
+  tendisplay.style.display='none'
+
+}
+else{
+  sixdisplay.style.display='block'
+  sevendisplay.style.display='block'
+  eightdisplay.style.display='block'
+  ninedisplay.style.display='block'
+  tendisplay.style.display='block'
+}*/}
+
+
+if (index===5) {
+
+six=document.getElementById('six')
+
+
+six.src='/static/'+String(images[index])
+
+}
+
+
+if (index===6) {
+
+seven=document.getElementById('seven')
+
+
+seven.src='/static/'+String(images[index])
+
+}
+
+
+if (index===7) {
+
+eight=document.getElementById('eight')
+
+
+eight.src='/static/'+String(images[index])
+
+}
+
+
+if (index===8) {
+
+nine=document.getElementById('nine')
+
+
+nine.src='/static/'+String(images[index])
+
+}
+
+if (index===9) {
+
+ten=document.getElementById('ten')
+
+
+ten.src='/static/'+String(images[index])
+
+}
+
+      }
+
+      console.log('images',images)
+        // Process the response data
+        console.log(data);
+      },
+      error: function(error) {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      }
+    });
+  }
+      // console.log("Option 1 selected");
+      break;
+    case "option2":
+      dunya=false
+      // Action for Option 2
+      console.log("Option 2 selected");
+      break;
+    case "option3":
+      dunya=false
+      // Action for Option 3
+      console.log("Option 3 selected");
+      break;
+    default:
+    
+      // Default action if no option is selected
+      
+      console.log("No option selected");
+  }
+}   
+
+var button_clear={{clear}}
+
+
+/* Paginator function*/
+$(document).ready(function() {
+    var page = 2;  // Starting from the second page
+    var loadMoreBtn = $("#load-more-btn");
+    var tableBody = $("#table-body");
+    var loader = $("#loader");
+    var loadMoreContainer = $("#load-more-container");
+
+    loadMoreBtn.click(function() {
+      const getting_table=document.getElementById('fulltable')
+              getting_table.style.display='none'
+        loadMoreBtn.prop('disabled', true); // Disable the button to prevent multiple clicks
+        loader.show(); // Show the loader
+
+        $.ajax({
+            url: "{% url 'table_view' %}",
+            data: { page: page },
+            dataType: 'html',
+            success: function(data) {
+  
+              console.log('data',data)
+                var newRows = $(data).find("tr:not(:first)"); // Extract the new rows from the response, excluding the header row
+                tableBody.append(newRows); // Append the new rows to the table body
+                if(button_clear==='True'){
+                     loadMoreContainer.remove();
+                }
+                page++;
+                loadMoreBtn.prop('disabled', false); // Enable the button after new data is loaded
+                loader.hide(); // Hide the loader
+            },
+            error: function(error) {
+                console.error(error);
+                loadMoreBtn.prop('disabled', false); // Enable the button in case of error
+                loader.hide(); // Hide the loader
+            },
+            complete: function() {
+                // loadMoreContainer.remove(); // Remove the load more button container after the first click
+            }
+        });
+    });
+});
+
+</script>
+
+  
+
+</body>
+
+
+
+
+</html>
+
+
+ 
